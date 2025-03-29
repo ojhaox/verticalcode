@@ -27,7 +27,7 @@
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: #2a2a5a;
             overflow-x: hidden;
             position: relative;
             width: 100%;
@@ -35,10 +35,104 @@
             -webkit-overflow-scrolling: touch;
             line-height: 1.6;
             color: #333;
+            background: linear-gradient(135deg, #2a2a5a, #1a1a3a);
+        }
+
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .aurora {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at center, 
+                rgba(0, 255, 136, 0.25) 0%,
+                rgba(0, 123, 255, 0.25) 25%,
+                rgba(255, 0, 255, 0.25) 50%,
+                rgba(0, 255, 136, 0.25) 75%,
+                rgba(0, 123, 255, 0.25) 100%);
+            animation: auroraMove 15s linear infinite;
+            opacity: 0.9;
+            filter: blur(20px);
+        }
+
+        .light-beam {
+            position: absolute;
+            width: 150%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(0, 255, 136, 0.6),
+                rgba(0, 123, 255, 0.6),
+                rgba(255, 0, 255, 0.6),
+                transparent);
+            transform-origin: left;
+            animation: beamMove 6s linear infinite;
+            filter: blur(2px);
+        }
+
+        .light-beam:nth-child(1) {
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .light-beam:nth-child(2) {
+            top: 40%;
+            animation-delay: -1.5s;
+        }
+
+        .light-beam:nth-child(3) {
+            top: 60%;
+            animation-delay: -3s;
+        }
+
+        .light-beam:nth-child(4) {
+            top: 80%;
+            animation-delay: -4.5s;
+        }
+
+        @keyframes beamMove {
+            0% {
+                transform: translateX(-100%) rotate(-45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(-45deg);
+            }
+        }
+
+        .aurora:nth-child(2) {
+            animation-delay: -7.5s;
+            transform: rotate(45deg);
+        }
+
+        .aurora:nth-child(3) {
+            animation-delay: -3.75s;
+            transform: rotate(-45deg);
+        }
+
+        @keyframes auroraMove {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.5);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
         }
 
         .header {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 1rem 2rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: fixed;
@@ -49,6 +143,9 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .header.scrolled {
@@ -129,10 +226,13 @@
         }
 
         .web3-content {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .web3-content h1 {
@@ -190,16 +290,39 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin: 2rem 0;
+            position: relative;
+        }
+
+        .token-grid::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(45deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
+            border-radius: 12px;
+            z-index: -1;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         .token-card {
-            background: #f8f9fa;
+            background: rgba(248, 249, 250, 0.95);
             padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .token-card::before {
@@ -229,6 +352,9 @@
             font-size: 2rem;
             margin-bottom: 0.5rem;
             font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .token-card p {
@@ -267,24 +393,240 @@
         }
 
         .token-address {
-            background: white;
+            background: rgba(42, 42, 90, 0.2);
             padding: 1.5rem 2rem;
             margin-top: 80px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .token-address:hover {
+            background: rgba(42, 42, 90, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .token-address::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(0, 123, 255, 0.15),
+                rgba(0, 255, 136, 0.15));
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .token-address:hover::before {
+            opacity: 0.8;
         }
 
         .token-address h2 {
-            color: #333;
+            color: #fff;
             font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .token-address p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .ai-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .ai-feature {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .ai-feature:hover::before {
+            opacity: 1;
+        }
+
+        .ai-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .ai-feature h3 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .ai-feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .ai-feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .ai-visualization {
+            margin: 4rem 0;
+            text-align: center;
+        }
+
+        .ai-visualization h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .ai-visualization-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .ai-visual {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-visual:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .ai-visual img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .ai-visual:hover img {
+            transform: scale(1.05);
+        }
+
+        .ai-visual h3 {
+            color: #333;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
             font-family: 'Orbitron', sans-serif;
         }
 
-        .token-address p {
+        .ai-visual p {
             color: #666;
-            font-size: 1.2rem;
-            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .ai-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .ai-stat {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .ai-stat:hover::before {
+            opacity: 1;
+        }
+
+        .ai-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .ai-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .ai-stat-label {
+            color: #666;
+            font-size: 1.1rem;
         }
 
         /* Mobile-specific styles */
@@ -345,6 +687,14 @@
             .token-address p {
                 font-size: 1rem;
             }
+
+            .ai-features {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-stats {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Handle orientation changes */
@@ -381,10 +731,31 @@
             .token-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .ai-features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ai-visualization-container {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
+    <div class="aurora-bg">
+        <div class="aurora"></div>
+        <div class="aurora"></div>
+        <div class="aurora"></div>
+        <div class="light-beam"></div>
+        <div class="light-beam"></div>
+        <div class="light-beam"></div>
+        <div class="light-beam"></div>
+    </div>
     <header class="header">
         <h1>VerticalCode</h1>
         <div class="nav-buttons">
@@ -423,6 +794,56 @@
                 <div class="token-card">
                     <h3>Whale Chat Access</h3>
                     <p>Gain early feature access, priority support and influence over platform decisions by becoming top-tier holder.</p>
+                </div>
+            </div>
+
+            <h2>AI-Powered Features</h2>
+            <div class="ai-features">
+                <div class="ai-feature">
+                    <div class="ai-feature-icon">🤖</div>
+                    <h3>AI Trading</h3>
+                    <p>Advanced AI algorithms analyze market trends and optimize trading strategies for $VTC holders.</p>
+                </div>
+                <div class="ai-feature">
+                    <div class="ai-feature-icon">🎯</div>
+                    <h3>Smart Predictions</h3>
+                    <p>Machine learning models provide accurate market predictions and investment insights.</p>
+                </div>
+                <div class="ai-feature">
+                    <div class="ai-feature-icon">🔮</div>
+                    <h3>AI Governance</h3>
+                    <p>AI-powered voting system ensures fair and efficient decision-making in the ecosystem.</p>
+                </div>
+            </div>
+
+            <div class="ai-visualization">
+                <h2>AI in Action</h2>
+                <div class="ai-visualization-container">
+                    <div class="ai-visual">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60" alt="AI Trading Visualization">
+                        <h3>Real-time Market Analysis</h3>
+                        <p>Our AI system continuously monitors market data and provides instant insights for informed trading decisions.</p>
+                    </div>
+                    <div class="ai-visual">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=60" alt="AI Prediction Visualization">
+                        <h3>Predictive Analytics</h3>
+                        <p>Advanced machine learning models analyze historical data to forecast market trends and opportunities.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-stats">
+                <div class="ai-stat">
+                    <div class="ai-stat-number">99.9%</div>
+                    <div class="ai-stat-label">AI Prediction Accuracy</div>
+                </div>
+                <div class="ai-stat">
+                    <div class="ai-stat-number">24/7</div>
+                    <div class="ai-stat-label">Continuous Monitoring</div>
+                </div>
+                <div class="ai-stat">
+                    <div class="ai-stat-number">0.1s</div>
+                    <div class="ai-stat-label">Response Time</div>
                 </div>
             </div>
 
