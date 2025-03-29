@@ -1,0 +1,11 @@
+{
+  "name": "verticalcode",
+  "version": "1.0.0",
+  "description": "VerticalCode website",
+  "scripts": {
+    "start": "npx http-server -p 3000 -o --no-cache --cors -c-1"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+} 

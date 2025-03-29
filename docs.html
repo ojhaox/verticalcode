@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="VerticalCode">
+    <meta name="apple-mobile-web-app-title" content="VerticalCode">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>VerticalCode - Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            -webkit-overflow-scrolling: touch;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            position: absolute;
+            left: 2rem;
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header h1:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .nav-button.active {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+        }
+
+        .container {
+            display: flex;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #ffffff;
+            padding: 1rem;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-menu a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,123,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .sidebar-menu a:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-menu a:hover {
+            background: #f8f9fa;
+            color: #007bff;
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a.active {
+            background: #e7f1ff;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 2rem;
+            max-width: calc(100% - 300px);
+        }
+
+        .docs-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .docs-content h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .docs-content h2 {
+            color: #444;
+            margin: 2rem 0 1rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .docs-content h3 {
+            color: #555;
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .docs-content p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .docs-content ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .docs-content li {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .docs-content li:hover {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+
+        .docs-content blockquote {
+            border-left: 4px solid #007bff;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            background: #f8f9fa;
+            color: #555;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .docs-content blockquote:hover {
+            background: #e7f1ff;
+            transform: translateX(5px);
+        }
+
+        .docs-content strong {
+            color: #444;
+            font-weight: 600;
+        }
+
+        .docs-content iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            margin: 1rem 0;
+            background: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .docs-content iframe:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin: 1rem 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .iframe-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+        }
+
+        .iframe-loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: #007bff;
+        }
+
+        /* Mobile-specific styles */
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem;
+                height: 50px;
+            }
+
+            .header h1 {
+                left: 1rem;
+                font-size: 1.4rem;
+            }
+
+            .nav-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .container {
+                margin-top: 50px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                top: 50px;
+                left: -100%;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                max-width: 100%;
+            }
+
+            .docs-content {
+                padding: 1rem;
+            }
+
+            .docs-content h1 {
+                font-size: 2rem;
+            }
+
+            .docs-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .docs-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .header h1 {
+                left: 1rem;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>VerticalCode</h1>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">Launch</a>
+            <a href="docs.html" class="nav-button active">Docs</a>
+            <a href="web3.html" class="nav-button">Web3</a>
+        </div>
+    </header>
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#introduction" class="active">Introduction</a></li>
+                <li><a href="#mission">Mission and Vision</a></li>
+                <li><a href="#problems">Problems we solve</a></li>
+                <li><a href="#value">Value Proposition</a></li>
+                <li><a href="#ecosystem">Ecosystem: High-level</a></li>
+                <li><a href="#usecases">Use cases</a></li>
+                <li><a href="#nocode">No-Code Studio</a></li>
+                <li><a href="#stream">Vertical Stream</a></li>
+                <li><a href="#analytics">Analytical dashboard</a></li>
+                <li><a href="#architecture">Target architecture</a></li>
+                <li><a href="#token">Token Utility</a></li>
+                <li><a href="#tokenomics">Tokenomics</a></li>
+                <li><a href="#join">Join us</a></li>
+                <li><a href="#contact">Contact us</a></li>
+            </ul>
+        </nav>
+        
+        <main class="main-content">
+            <div class="docs-content">
+                <h1>Documentation</h1>
+
+                <h2 id="introduction">Introduction</h2>
+                <blockquote>"Dig into every industry, and you'll find AI changing the nature of work"</blockquote>
+
+                <p>Creating AI models for specific needs can be difficult, especially for people without technical expertise. As AI continues to reshape industries by assisting a wide range of industry related tasks, it's becoming harder to ignore its potential.</p>
+
+                <p>At Vertical, we aim to make the process of creating and fine-tuning custom AI models for industry-specific challenges more accessible. Our no-code solution allows anyone, regardless of technical ability, to build tailored AI models that can be easily integrated into different workflows.</p>
+
+                <h2 id="mission">Mission and Vision</h2>
+                <p>Our mission is to democratize AI by making it accessible to everyone, regardless of their technical background. We envision a future where AI customization is as simple as using a spreadsheet, enabling businesses and individuals to harness the power of AI for their specific needs.</p>
+
+                <h2 id="problems">Problems we solve</h2>
+                <ul>
+                    <li>Technical barriers to AI adoption</li>
+                    <li>High costs of AI model development</li>
+                    <li>Complexity of AI model customization</li>
+                    <li>Limited access to computing resources</li>
+                    <li>Difficulty in monetizing AI innovations</li>
+                </ul>
+
+                <h2 id="value">Value Proposition</h2>
+                <p>Vertical provides a comprehensive solution that combines:</p>
+                <ul>
+                    <li>No-code AI model customization</li>
+                    <li>Decentralized computing infrastructure</li>
+                    <li>Marketplace for model sharing and monetization</li>
+                    <li>Analytics and monitoring tools</li>
+                    <li>Community-driven development</li>
+                </ul>
+
+                <h2 id="ecosystem">Ecosystem: High-level</h2>
+                <p>The Vertical ecosystem consists of several key components:</p>
+                <ul>
+                    <li>No-Code Studio for model customization</li>
+                    <li>Vertical Stream for model deployment and monetization</li>
+                    <li>Decentralized computing network</li>
+                    <li>Token-based governance and rewards</li>
+                    <li>Community marketplace</li>
+                </ul>
+
+                <h2 id="usecases">Use cases</h2>
+                <p>Our platform supports a wide range of use cases across industries:</p>
+                <ul>
+                    <li>Natural Language Processing</li>
+                    <li>Computer Vision</li>
+                    <li>Predictive Analytics</li>
+                    <li>Recommendation Systems</li>
+                    <li>Custom AI Solutions</li>
+                </ul>
+
+                <h2 id="nocode">No-Code Studio</h2>
+                <p>The No-Code Studio is our flagship product that enables users to customize AI models without writing code. Key features include:</p>
+                <ul>
+                    <li>Drag-and-drop interface</li>
+                    <li>Dataset management tools</li>
+                    <li>Model customization options</li>
+                    <li>Performance monitoring</li>
+                    <li>Integration capabilities</li>
+                </ul>
+
+                <h2 id="stream">Vertical Stream</h2>
+                <p>Vertical Stream provides a platform for deploying and monetizing AI models. Features include:</p>
+                <ul>
+                    <li>Model deployment tools</li>
+                    <li>API access</li>
+                    <li>Usage analytics</li>
+                    <li>Revenue sharing</li>
+                    <li>Community marketplace</li>
+                </ul>
+
+                <h2 id="analytics">Analytical dashboard & API management</h2>
+                <p>Our analytics dashboard provides comprehensive insights into:</p>
+                <ul>
+                    <li>Model performance metrics</li>
+                    <li>Usage statistics</li>
+                    <li>Revenue tracking</li>
+                    <li>API usage monitoring</li>
+                    <li>Resource utilization</li>
+                </ul>
+
+                <h2 id="architecture">Target architecture</h2>
+                <p>The Vertical platform architecture is designed for:</p>
+                <ul>
+                    <li>Scalability</li>
+                    <li>Security</li>
+                    <li>Performance</li>
+                    <li>Reliability</li>
+                    <li>Interoperability</li>
+                </ul>
+
+                <h2 id="token">Token Utility</h2>
+                <p>The $VTC token serves multiple purposes within our ecosystem:</p>
+                <ul>
+                    <li>Platform governance</li>
+                    <li>Revenue sharing</li>
+                    <li>Premium feature access</li>
+                    <li>Community rewards</li>
+                    <li>Network incentives</li>
+                </ul>
+
+                <h2 id="tokenomics">Tokenomics</h2>
+                <p>Our token distribution is designed to ensure sustainable growth:</p>
+                <ul>
+                    <li>90% Liquidity Pool</li>
+                    <li>5% Marketing & Development</li>
+                    <li>5% Team</li>
+                </ul>
+
+                <h2 id="join">Join us</h2>
+                <p>We're always looking for talented individuals to join our team. Visit our careers page to learn more about opportunities at Vertical.</p>
+
+                <h2 id="contact">Contact us</h2>
+                <p>For any inquiries or support, please reach out to our team through our contact page or join our community channels.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Highlight active section in sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('h2');
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+
+            function setActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.pageYOffset >= sectionTop) {
+                        currentSection = section.id;
+                    }
+                });
+
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', setActiveLink);
+            setActiveLink();
+
+            // Add scroll effect to header
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('.header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
